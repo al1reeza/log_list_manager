@@ -140,5 +140,3 @@ destroy_log_array_manager(log_am);
 * All functions return `SUCCESS` or `FAILURE` macros for consistency.
 * The array manager automatically doubles capacity when full.
 * The list manager supports keyword searching, while the array manager does not.
-
----
