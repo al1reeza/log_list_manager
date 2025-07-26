@@ -142,10 +142,3 @@ destroy_log_array_manager(log_am);
 * The list manager supports keyword searching, while the array manager does not.
 
 ---
-
-## Future Improvements
-
-* Add sorting functionality.
-* Add timestamp parsing and comparison.
-* Implement keyword search in array version.
-* Add export to JSON or CSV.
