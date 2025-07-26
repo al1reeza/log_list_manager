@@ -16,7 +16,7 @@ typedef struct LogEntry {
 
 typedef struct LogManager {
     LogEntry *head;  
-    int count;       
+    int count;    
 } LogManager;
 
 LogManager *create_log_manager();
