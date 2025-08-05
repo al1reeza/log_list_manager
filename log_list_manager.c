@@ -35,6 +35,7 @@ int destroy_log_manager(LogManager *log_m) {
         curr_entry = next_entry;
     }
     log_m->head = NULL;
+    log_m->tail = NULL;
     free(log_m);
     return SUCCESS;
 
@@ -68,7 +69,7 @@ static int free_entry(LogEntry *log_e){
 */
 int add_log(LogManager *log_m, const char *timestamp, const char *severity, const char *message) {
     
-    LogEntry *curr_entry = log_m->head, *new_entry;
+    LogEntry *new_entry;
     /* Invalid Parameters */
     if(log_m == NULL || timestamp == NULL || severity == NULL || message == NULL){
         return FAILURE;
@@ -95,17 +96,17 @@ int add_log(LogManager *log_m, const char *timestamp, const char *severity, cons
     strcpy(new_entry->time_stamp, timestamp);
 
     /* Case where we are adding the first element */
-    if(curr_entry == NULL){
+    if(log_m->head == NULL){
         log_m->head = new_entry;
+        log_m->tail = new_entry;
         log_m->count++;
         return SUCCESS;
     }
 
-    while(curr_entry->next != NULL){
-        curr_entry = curr_entry->next;
-    }
+    log_m->tail->next = new_entry;
+    log_m->tail = new_entry;
     log_m->count++;
-    curr_entry->next = new_entry;
+
     return SUCCESS;
 }
 
@@ -128,6 +129,11 @@ int remove_logs_by_severity(LogManager *log_m, const char *severity) {
                 log_m->head = curr_entry->next;
                 free_entry(curr_entry);
                 curr_entry = log_m->head;
+            }else if(curr_entry == log_m->tail){
+                log_m->tail = prev_entry;
+                prev_entry->next = NULL;
+                free_entry(curr_entry);
+                curr_entry = log_m->tail->next;
             }else{
                 prev_entry->next = curr_entry->next;
                 free_entry(curr_entry);

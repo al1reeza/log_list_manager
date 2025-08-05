@@ -15,7 +15,8 @@ typedef struct LogEntry {
 
 
 typedef struct LogManager {
-    LogEntry *head;  
+    LogEntry *head; 
+    LogEntry *tail; 
     int count;    
 } LogManager;
 
