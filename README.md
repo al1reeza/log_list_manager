@@ -40,6 +40,7 @@ typedef struct LogEntry {
 ```c
 typedef struct {
     LogEntry *head;
+    LogEntry *tail;
     int count;
 } LogManager;
 ```
