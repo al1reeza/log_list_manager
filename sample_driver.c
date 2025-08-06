@@ -1,5 +1,8 @@
 #include <stdio.h>
+#include <string.h>
+
 #include "log_list_manager.h"
+#include "list_sort_utils.h"
 
 int main(void) {
     LogManager *log_m = create_log_manager();
@@ -13,11 +16,22 @@ int main(void) {
     add_log(log_m, "2025-07-06 10:10:00", "INFO", "Process started");
     add_log(log_m, "2025-07-06 10:15:00", "ERROR", "Disk failure");
 
-    printf("All logs:\n");
+    printf("All logs (unsorted):\n");
     write_all_logs(log_m, stdout);
 
-    printf("\nSearching for 'Memory':\n");
-    search_and_write_logs(log_m, "Memory", stdout);
+    printf("\nSorting logs by message (Bubble Sort)...\n");
+    bubble_sort_logs(log_m);
+    write_all_logs(log_m, stdout);
+
+    add_log(log_m, "2025-07-06 10:20:00", "DEBUG", "Network initialized");
+    add_log(log_m, "2025-07-06 10:25:00", "WARN", "CPU temperature high");
+
+    printf("\nLogs after adding more entries (unsorted):\n");
+    write_all_logs(log_m, stdout);
+
+    printf("\nSorting again after adding new logs(Bubble Sort)...\n");
+    bubble_sort_logs(log_m);
+    write_all_logs(log_m, stdout);
 
     printf("\nRemoving INFO logs...\n");
     int removed = remove_logs_by_severity(log_m, "INFO");
@@ -35,3 +49,5 @@ int main(void) {
 
     return 0;
 }
+
+

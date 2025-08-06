@@ -1,9 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "log_list_manager.h"
+#include "list_sort_utils.h"
+
 
 static int free_entry(LogEntry *log_e);
+static int list_comparator(const LogEntry *a, const LogEntry *b);
 
 /*
 * Creates and initializes a new LogManager.
@@ -81,16 +85,22 @@ int add_log(LogManager *log_m, const char *timestamp, const char *severity, cons
     }
     new_entry->message = malloc(strlen(message) + 1);
     if(new_entry->message == NULL){
+        free(new_entry);
         return FAILURE;
     }
     strcpy(new_entry->message, message);
     new_entry->severity = malloc(strlen(severity) + 1);
     if(new_entry->severity == NULL){
+        free(new_entry);
+        free(new_entry->message);
         return FAILURE;
     }
     strcpy(new_entry->severity, severity);
     new_entry->time_stamp = malloc(strlen(timestamp) + 1);
     if(new_entry->time_stamp == NULL){
+        free(new_entry);
+        free(new_entry->message);
+        free(new_entry->severity);
         return FAILURE;
     }
     strcpy(new_entry->time_stamp, timestamp);
@@ -129,12 +139,16 @@ int remove_logs_by_severity(LogManager *log_m, const char *severity) {
                 log_m->head = curr_entry->next;
                 free_entry(curr_entry);
                 curr_entry = log_m->head;
-            }else if(curr_entry == log_m->tail){
+            }
+            /* Case where last entry is being removed */
+            else if(curr_entry == log_m->tail){
                 log_m->tail = prev_entry;
                 prev_entry->next = NULL;
                 free_entry(curr_entry);
                 curr_entry = log_m->tail->next;
-            }else{
+            }
+            /* Case where elemetn is in the middle */
+            else{
                 prev_entry->next = curr_entry->next;
                 free_entry(curr_entry);
                 curr_entry = prev_entry->next;
@@ -142,6 +156,7 @@ int remove_logs_by_severity(LogManager *log_m, const char *severity) {
             num_entry++;
             log_m->count--;
         }else{
+            prev_entry = curr_entry;
             curr_entry = curr_entry->next;
         }
     }
@@ -211,3 +226,73 @@ int clear_logs(LogManager *log_m){
     return SUCCESS;
 
 }
+
+/*
+* Sorts the linked list using bubble sort 
+*/
+int bubble_sort_logs(LogManager *log_m){
+    LogEntry *curr_entry, *prev_entry, *next_entry;
+    int i;
+    /* Invalid parameters */
+    if(log_m == NULL || log_m->count < 2){
+        return FAILURE;
+    }
+    for(i = 0; i < log_m->count-1; i++){
+        int swapped = 0;
+
+        curr_entry = log_m->head;
+        prev_entry = NULL;
+        next_entry = curr_entry->next;
+
+        while(curr_entry != log_m->tail){
+            if(list_comparator(curr_entry, next_entry) > 0){
+                /* case we are swapping the head */
+                if(prev_entry == NULL){
+                    log_m->head = next_entry;
+                    curr_entry->next = next_entry->next;
+                    next_entry->next = curr_entry;
+                }
+                /* case we are swapping the tail */
+                else if(next_entry == log_m->tail){
+                    log_m->tail = curr_entry;
+                    prev_entry->next = next_entry;
+                    curr_entry->next = next_entry->next;
+                    next_entry->next = curr_entry;
+                }
+                /* case we are swapping two thgins in the middle */
+                else{
+                    prev_entry->next = next_entry;
+                    curr_entry->next = next_entry->next;
+                    next_entry->next = curr_entry;
+                }
+                prev_entry = next_entry;
+                next_entry = curr_entry->next;
+                swapped = 1;
+            }else{
+                prev_entry = curr_entry;
+                curr_entry = curr_entry->next;
+                next_entry = next_entry->next;
+            }
+        }  
+
+        if(!swapped){
+            break;
+        }
+
+    }
+
+    return SUCCESS;
+}
+
+/*
+* Comparator for our list (based on message field of LogEntry)
+*/
+static int list_comparator(const LogEntry *a, const LogEntry *b){
+    return strcmp(a->message, b->message);
+}
+
+int merge_sort_logs(LogManager *log_m)
+{
+    return 0;
+}
+
