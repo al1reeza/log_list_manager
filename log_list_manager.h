@@ -27,5 +27,7 @@ int remove_logs_by_severity(LogManager *log_m, const char *severity);
 int write_all_logs(const LogManager *log_m, FILE *stream);
 int search_and_write_logs(const LogManager *log_m, const char *keyword, FILE *stream);
 int clear_logs(LogManager *log_m);
+int bubble_sort_logs(LogManager *log_m);
+int merge_sort_logs(LogManager *log_m); 
 
 #endif 

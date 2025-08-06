@@ -2,7 +2,6 @@
 #include <string.h>
 
 #include "log_list_manager.h"
-#include "list_sort_utils.h"
 
 int main(void) {
     LogManager *log_m = create_log_manager();
@@ -29,8 +28,8 @@ int main(void) {
     printf("\nLogs after adding more entries (unsorted):\n");
     write_all_logs(log_m, stdout);
 
-    printf("\nSorting again after adding new logs(Bubble Sort)...\n");
-    bubble_sort_logs(log_m);
+    printf("\nSorting logs by message (Merge Sort)...\n");
+    merge_sort_logs(log_m);
     write_all_logs(log_m, stdout);
 
     printf("\nRemoving INFO logs...\n");

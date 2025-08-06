@@ -6,7 +6,7 @@ all: $(PROGS)
 
 list_driver: log_list_manager.o sample_driver.o
 	$(CC) -o list_driver log_list_manager.o sample_driver.o
-log_list_manager.o:	log_list_manager.c log_list_manager.h list_sort_utils.h
+log_list_manager.o:	log_list_manager.c log_list_manager.h 
 	$(CC) $(CFLAGS) -c log_list_manager.c
 sample_driver.o: sample_driver.c log_list_manager.h
 	$(CC) $(CFLAGS) -c sample_driver.c

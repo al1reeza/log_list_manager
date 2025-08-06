@@ -3,11 +3,13 @@
 #include <string.h>
 
 #include "log_list_manager.h"
-#include "list_sort_utils.h"
 
 
 static int free_entry(LogEntry *log_e);
 static int list_comparator(const LogEntry *a, const LogEntry *b);
+static LogEntry *merge_sort_aux(LogEntry *head, int len);
+static LogEntry *merge(LogEntry *left_head, LogEntry *right_head);
+
 
 /*
 * Creates and initializes a new LogManager.
@@ -285,14 +287,100 @@ int bubble_sort_logs(LogManager *log_m){
 }
 
 /*
-* Comparator for our list (based on message field of LogEntry)
+* Comparator for our list (based on message field of LogEntry).
 */
 static int list_comparator(const LogEntry *a, const LogEntry *b){
-    return strcmp(a->message, b->message);
+    return strcmp(a->severity, b->severity);
 }
 
-int merge_sort_logs(LogManager *log_m)
-{
-    return 0;
+/*
+* Merge sort algorithm for linked list. 
+*/
+int merge_sort_logs(LogManager *log_m){
+
+    LogEntry *curr_entry;
+
+    log_m->head = merge_sort_aux(log_m->head, log_m->count); /* sorts the list */
+    
+    /* sets the tail */  
+    curr_entry = log_m->head;
+    while(curr_entry->next != NULL){
+        curr_entry = curr_entry->next;
+    }
+    log_m->tail = curr_entry;
+
+    return SUCCESS;
 }
 
+/*
+* Merge sort auxillary function.
+*/
+static LogEntry *merge_sort_aux(LogEntry *head, int len){
+    
+    LogEntry *left_head = head, *right_head = head, *left_last;
+    int i, middle = len/2;
+    /* Base case */
+    if(len <= 1){
+        return head;
+    } 
+    /* Gets the right_head to the correct position */
+    for(i = 0; i < middle; i++){
+        if(i == middle - 1){
+            left_last = right_head;
+        }
+        right_head = right_head->next;
+    }
+
+    left_last->next = NULL;
+
+    left_head = merge_sort_aux(left_head, (len/2)); /* left subarray call */
+
+    right_head = merge_sort_aux(right_head, len - (len/2)); /* right subarray call */
+
+    return merge(left_head, right_head);
+}
+
+/*
+* Merges the left and subarray sorted.
+*/
+static LogEntry *merge(LogEntry *left_head, LogEntry *right_head){
+
+    LogEntry *curr_head, *head;
+
+    /* Finds the head */
+    if(list_comparator(left_head, right_head) <= 0){
+        curr_head = left_head;
+        left_head = left_head->next;
+    }else{
+        curr_head = right_head;
+        right_head = right_head->next;
+    }
+    head = curr_head; /* sets the head for return */
+
+    while(left_head != NULL && right_head != NULL){
+        int cmp = list_comparator(left_head, right_head);
+        if(cmp <= 0){
+            curr_head->next = left_head;
+            left_head = left_head->next;
+            curr_head = curr_head->next;
+        }else{
+            curr_head->next = right_head;
+            right_head = right_head->next;
+            curr_head = curr_head->next;
+        }
+    }
+    /* checks for any left over in left sublist */
+    while (left_head != NULL){
+        curr_head->next = left_head;
+        left_head = left_head->next;
+        curr_head = curr_head->next;
+    }
+    /* checks for any left over in right sublist */  
+    while(right_head != NULL){
+        curr_head->next = right_head;
+        right_head = right_head->next;
+        curr_head = curr_head->next;
+    }
+
+    return head;
+}
