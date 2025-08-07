@@ -62,11 +62,9 @@ log-manager/
 
 ### Building the Project
 
-Clone and build the project:
+Build the project:
 
 ```bash
-git clone <repository-url>
-cd log-manager
 make all
 ```
 
@@ -229,3 +227,41 @@ The library implements robust memory management:
 - **Memory allocation** needs to be flexible
 - You want to **search by keywords** in messages
 - **Dynamic sizing** without reallocation is preferred
+
+## Contributing
+
+Contributions are welcome! Please ensure:
+- Code follows C89/C90 standards
+- All functions include proper error checking
+- Memory management is handled correctly
+- New features include appropriate test cases
+
+## License
+
+MIT License
+Copyright (c) 2025 Alireza Alvandi
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+## Future Enhancements
+
+Potential improvements could include:
+- Thread-safety for concurrent access
+- Configurable timestamp formats
+- Log level filtering
+- Compression for large log files
+- Network logging capabilities
+- Binary search for sorted arrays
