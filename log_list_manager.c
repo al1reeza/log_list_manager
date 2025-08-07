@@ -139,15 +139,27 @@ int remove_logs_by_severity(LogManager *log_m, const char *severity) {
             /* Case where first entry is being removed */
             if(prev_entry == NULL){
                 log_m->head = curr_entry->next;
+                if(log_m->tail == curr_entry){
+                    log_m->tail = curr_entry->next;
+                }
                 free_entry(curr_entry);
                 curr_entry = log_m->head;
             }
             /* Case where last entry is being removed */
             else if(curr_entry == log_m->tail){
-                log_m->tail = prev_entry;
-                prev_entry->next = NULL;
-                free_entry(curr_entry);
-                curr_entry = log_m->tail->next;
+                /* only entry */
+                if(prev_entry == NULL){
+                    log_m->tail = prev_entry;
+                    log_m->head = prev_entry;
+                    free_entry(curr_entry);
+                    curr_entry = NULL;
+                }else{
+                    log_m->tail = prev_entry;
+                    prev_entry->next = NULL;
+                    free_entry(curr_entry);
+                    curr_entry = NULL;
+                }
+                
             }
             /* Case where elemetn is in the middle */
             else{
