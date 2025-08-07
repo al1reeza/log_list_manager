@@ -3,7 +3,7 @@
 #include "log_array_manager.h"
 
 int main(void) {
-    LogArrayManager *log_manager = create_log_array_manager(5);
+     LogArrayManager *log_manager = create_log_array_manager(5);
     if (!log_manager) {
         fprintf(stderr, "Failed to create log manager\n");
         return 1;
@@ -30,6 +30,16 @@ int main(void) {
 
     quick_sort_array(log_manager);
     printf("\nLogs after quick sort:\n");
+    write_all_logs(log_manager, stdout);
+
+    add_log_entry(log_manager, "2025-07-22 12:07", "TRACE", "Trace log");
+    add_log_entry(log_manager, "2025-07-22 12:08", "INFO", "Another info");
+
+    printf("\nLogs after adding more entries (undo sort effect):\n");
+    write_all_logs(log_manager, stdout);
+
+    heap_sort_array(log_manager);
+    printf("\nLogs after heap sort:\n");
     write_all_logs(log_manager, stdout);
 
     remove_logs_by_severity(log_manager, "WARN");

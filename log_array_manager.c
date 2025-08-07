@@ -8,6 +8,10 @@ static int create_entry(LogEntry **log_e, const char *timestamp, const char *sev
 static void quick_sort_array_aux(LogEntry **entries, int s_index, int p_index);
 static void merge_sort_array_aux(LogArrayManager *log_am, int left, int right);
 static int merge(LogEntry **entries, int left, int middle, int right);
+static void build_max_heap(LogEntry **entries, int len);
+static void bubble_down(LogEntry **entries, int idx, int len);
+static void sort_max_heap(LogEntry **entries, int len);
+
 
 /*
 * Creates and initializes a new LogArrayManager with initial capacity.
@@ -297,4 +301,92 @@ static int merge(LogEntry **entries, int left, int middle, int right){
     free(res_arr);
 
     return SUCCESS;
+}
+
+/*
+* Heap sort algorithm for our array 
+*/
+int heap_sort_array(LogArrayManager *log_am){
+
+    build_max_heap(log_am->entries, log_am->count);
+    sort_max_heap(log_am->entries, log_am->count);
+    return SUCCESS;
+
+}
+
+/*
+* Makes our entry array into a heap. (Builds a max heap)
+*/
+static void build_max_heap(LogEntry **entries, int len){
+
+    int i = (len - 2) / 2; /* index of first non-leaf node */
+    while(i >= 0){
+        bubble_down(entries, i--, len);
+    }
+
+}
+
+/*
+* Bubble down algorithm. (Builds a max heap)
+*/
+static void bubble_down(LogEntry **entries, int idx, int len){
+
+    int left_child = (2 * idx)  + 1;
+    int right_child = (2 * idx) + 2;
+    int swapped = 1;
+
+    while(swapped && (left_child < len || right_child < len)){
+
+        LogEntry *tmp;
+        int max_child, cmp1;
+
+        /* no left child but yes right child */
+        if(left_child >= len && right_child < len){
+            max_child = right_child;
+        }
+        /* yes left child no right child */
+        else if(left_child < len && right_child >= len){
+            max_child = left_child;
+        }
+        /* both children present */
+        else{
+            int cmp2 = array_comparator(entries[left_child], entries[right_child]); /* comparison of left and right child */
+            if(cmp2 >= 0){
+                max_child = left_child;
+            }else{
+                max_child = right_child;
+            }
+        }
+        
+        cmp1 = array_comparator(entries[idx], entries[max_child]); /* comaprison of parent and max child s*/
+        if(cmp1 < 0){
+            /* swaps */
+            tmp = entries[idx];
+            entries[idx] = entries[max_child];
+            entries[max_child] = tmp; 
+            /* updates fields */
+            idx = max_child;   
+            left_child = (2 * idx)  + 1;
+            right_child = (2 * idx) + 2;
+        }else{
+            swapped = 0;
+        }
+        
+    }
+
+}
+
+/*
+* Sorts an already made max heap.
+*/
+static void sort_max_heap(LogEntry **entries, int len){
+    
+    int end_idx = len-1;
+    while (end_idx != 0){
+        LogEntry *tmp = entries[0];
+        entries[0] = entries[end_idx];
+        entries[end_idx] = tmp;
+        bubble_down(entries, 0, end_idx--);
+    }
+    
 }

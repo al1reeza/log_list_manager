@@ -29,4 +29,6 @@ int clear_log_array(LogArrayManager *log_am);
 int write_all_logs(const LogArrayManager *log_am, FILE *stream);
 int quick_sort_array(LogArrayManager *log_am);
 int merge_sort_array(LogArrayManager *log_am);
+int heap_sort_array(LogArrayManager *log_am);
+
 #endif 
