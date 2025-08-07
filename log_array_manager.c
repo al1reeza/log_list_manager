@@ -418,6 +418,10 @@ static void bubble_down(LogEntry **entries, int idx, int len){
 */
 static void sort_max_heap(LogEntry **entries, int len){
     
+    /* heap is built */
+    if(len < 2){
+        return;
+    }
     int end_idx = len-1;
     while (end_idx != 0){
         LogEntry *tmp = entries[0];
