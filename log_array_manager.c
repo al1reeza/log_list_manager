@@ -124,6 +124,7 @@ static int create_entry(LogEntry **log_e, const char *timestamp, const char *sev
 
     (*log_e)->time_stamp = malloc(strlen(timestamp) + 1);
     if((*log_e)->time_stamp == NULL){
+        free(log_e);
         return FAILURE;
     }
     strcpy((*log_e)->time_stamp, timestamp);

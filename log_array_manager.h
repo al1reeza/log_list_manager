@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#define SUCCESS 0
+#define SUCCESS 1
 #define FAILURE -1
 
 /* Structure representing a single log entry */
