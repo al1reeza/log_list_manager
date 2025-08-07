@@ -64,6 +64,7 @@ log-manager/
 
 Build the project:
 
+```bash
 make all
 ```
 
@@ -226,3 +227,25 @@ The library implements robust memory management:
 - **Memory allocation** needs to be flexible
 - You want to **search by keywords** in messages
 - **Dynamic sizing** without reallocation is preferred
+
+## Contributing
+
+Contributions are welcome! Please ensure:
+- Code follows C89/C90 standards
+- All functions include proper error checking
+- Memory management is handled correctly
+- New features include appropriate test cases
+
+## License
+
+This project is provided for educational purposes. See the license file for details.
+
+## Future Enhancements
+
+Potential improvements could include:
+- Thread-safety for concurrent access
+- Configurable timestamp formats
+- Log level filtering
+- Compression for large log files
+- Network logging capabilities
+- Binary search for sorted arrays
