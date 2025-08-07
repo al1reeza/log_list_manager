@@ -62,11 +62,8 @@ log-manager/
 
 ### Building the Project
 
-Clone and build the project:
+Build the project:
 
-```bash
-git clone <repository-url>
-cd log-manager
 make all
 ```
 
