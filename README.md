@@ -96,24 +96,18 @@ make clean
 ```c
 #include "log_array_manager.h"
 
-// Create a log manager with initial capacity
 LogArrayManager *manager = create_log_array_manager(10);
 
-// Add log entries
 add_log_entry(manager, "2025-01-15 10:30:00", "INFO", "System started");
 add_log_entry(manager, "2025-01-15 10:31:00", "WARN", "Low memory");
 add_log_entry(manager, "2025-01-15 10:32:00", "ERROR", "Connection failed");
 
-// Sort logs by severity
 merge_sort_array(manager);
 
-// Write all logs to stdout
 write_all_logs(manager, stdout);
 
-// Remove logs by severity
 remove_logs_by_severity(manager, "WARN");
 
-// Clean up
 destroy_log_array_manager(manager);
 ```
 
@@ -122,20 +116,15 @@ destroy_log_array_manager(manager);
 ```c
 #include "log_list_manager.h"
 
-// Create a log manager
 LogManager *manager = create_log_manager();
 
-// Add log entries
 add_log(manager, "2025-01-15 10:30:00", "INFO", "Application started");
 add_log(manager, "2025-01-15 10:31:00", "DEBUG", "Processing request");
 
-// Sort logs
 merge_sort_logs(manager);
 
-// Search and write matching logs
 search_and_write_logs(manager, "request", stdout);
 
-// Clean up
 destroy_log_manager(manager);
 ```
 
