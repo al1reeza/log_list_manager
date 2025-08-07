@@ -19,6 +19,10 @@ static void sort_max_heap(LogEntry **entries, int len);
 */
 LogArrayManager *create_log_array_manager(size_t initial_capacity){
 
+    /* Invalid Parameter */
+    if(initial_capacity == 0){
+        return NULL;
+    }
     LogArrayManager *log_am = calloc(1, sizeof(LogArrayManager));
     if(log_am == NULL){
         return NULL;
@@ -84,11 +88,11 @@ static int free_entry(LogEntry *log_e){
 */
 int add_log_entry(LogArrayManager *log_am, const char *timestamp, const char *severity, const char *message){
 
+    LogEntry *log_e = NULL;
     /* Invalid Parameters */
     if(log_am == NULL || timestamp == NULL || severity == NULL || message == NULL){
         return FAILURE;
     }
-    LogEntry *log_e = NULL;
     if(create_entry(&log_e, timestamp, severity, message) == FAILURE) return FAILURE;
     /* case where we do NOT need reallocating memory */
     if(log_am->count < log_am->capacity){
@@ -131,17 +135,17 @@ static int create_entry(LogEntry **log_e, const char *timestamp, const char *sev
 
     (*log_e)->severity = malloc(strlen(severity) + 1);
     if((*log_e)->severity == NULL){
-        free(*log_e);
         free((*log_e)->time_stamp);
+        free(*log_e);
         return FAILURE;
     }
     strcpy((*log_e)->severity, severity);
 
     (*log_e)->message = malloc(strlen(message) + 1);
     if((*log_e)->message == NULL){
-        free(*log_e);
-        free((*log_e)->time_stamp);
         free((*log_e)->severity);
+        free((*log_e)->time_stamp);
+        free(*log_e);
         return FAILURE;
     }
     strcpy((*log_e)->message, message);
@@ -155,6 +159,10 @@ static int create_entry(LogEntry **log_e, const char *timestamp, const char *sev
 int remove_logs_by_severity(LogArrayManager *log_am, const char *severity){
     size_t i;
     int num_entries_removed = 0;
+    /* Invalid Parameters */
+    if(log_am == NULL || severity == NULL){
+        return FAILURE;
+    }
     for(i = 0; i < log_am->count; i++){
         LogEntry *log_e = log_am->entries[i];
         if(strcmp(log_e->severity, severity) == 0){ /* checks to see if severity are matched */
@@ -172,6 +180,10 @@ int remove_logs_by_severity(LogArrayManager *log_am, const char *severity){
  */
 int clear_log_array(LogArrayManager *log_am){
     size_t i;
+    /* Invalid Parameters */
+    if(log_am == NULL){
+        return FAILURE;
+    }
     for(i = 0; i < log_am->count; i++){
         LogEntry *log_e = log_am->entries[i];
         /* frees the memory allocated for our log_e */
@@ -188,6 +200,9 @@ int clear_log_array(LogArrayManager *log_am){
  */
 int write_all_logs(const LogArrayManager *log_am, FILE *stream){
     size_t i;
+    if(log_am == NULL || stream == NULL){
+        return FAILURE;
+    }
     for(i = 0; i < log_am->count; i++){
         LogEntry *log_e = log_am->entries[i];
         fprintf(stream, "[%s] [%s] %s\n", log_e->time_stamp, log_e->severity, log_e->message);
@@ -207,6 +222,10 @@ static int array_comparator(const LogEntry *a, const LogEntry *b){
 */
 int quick_sort_array(LogArrayManager *log_am){
     
+    /* Invalid Parameters */
+    if(log_am == NULL || log_am->count < 2){
+        return FAILURE;
+    }
     quick_sort_array_aux(log_am->entries, 0, log_am->count - 1);
     return SUCCESS;
 
@@ -251,6 +270,10 @@ static void quick_sort_array_aux(LogEntry **entries, int s_index, int p_index){
 */
 int merge_sort_array(LogArrayManager *log_am){
 
+    /* Invalid Parameters */
+    if(log_am == NULL || log_am->count < 2){
+        return FAILURE;
+    }
     merge_sort_array_aux(log_am, 0, log_am->count-1);
     return SUCCESS;
 
@@ -314,6 +337,10 @@ static int merge(LogEntry **entries, int left, int middle, int right){
 */
 int heap_sort_array(LogArrayManager *log_am){
 
+    /* Invalid Parameters */
+    if(log_am == NULL || log_am->count < 2){
+        return FAILURE;
+    }
     build_max_heap(log_am->entries, log_am->count);
     sort_max_heap(log_am->entries, log_am->count);
     return SUCCESS;

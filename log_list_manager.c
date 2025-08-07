@@ -93,16 +93,16 @@ int add_log(LogManager *log_m, const char *timestamp, const char *severity, cons
     strcpy(new_entry->message, message);
     new_entry->severity = malloc(strlen(severity) + 1);
     if(new_entry->severity == NULL){
-        free(new_entry);
         free(new_entry->message);
+        free(new_entry);
         return FAILURE;
     }
     strcpy(new_entry->severity, severity);
     new_entry->time_stamp = malloc(strlen(timestamp) + 1);
     if(new_entry->time_stamp == NULL){
-        free(new_entry);
-        free(new_entry->message);
         free(new_entry->severity);
+        free(new_entry->message);
+        free(new_entry);
         return FAILURE;
     }
     strcpy(new_entry->time_stamp, timestamp);
@@ -297,9 +297,11 @@ static int list_comparator(const LogEntry *a, const LogEntry *b){
 * Merge sort algorithm for linked list. 
 */
 int merge_sort_logs(LogManager *log_m){
-
     LogEntry *curr_entry;
-
+    /* Invalid Parameters */
+    if(log_m == NULL || log_m->count < 2){
+        return FAILURE;
+    }
     log_m->head = merge_sort_aux(log_m->head, log_m->count); /* sorts the list */
     
     /* sets the tail */  
