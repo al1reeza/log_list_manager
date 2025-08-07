@@ -124,19 +124,24 @@ static int create_entry(LogEntry **log_e, const char *timestamp, const char *sev
 
     (*log_e)->time_stamp = malloc(strlen(timestamp) + 1);
     if((*log_e)->time_stamp == NULL){
-        free(log_e);
+        free(*log_e);
         return FAILURE;
     }
     strcpy((*log_e)->time_stamp, timestamp);
 
     (*log_e)->severity = malloc(strlen(severity) + 1);
     if((*log_e)->severity == NULL){
+        free(*log_e);
+        free((*log_e)->time_stamp);
         return FAILURE;
     }
     strcpy((*log_e)->severity, severity);
 
     (*log_e)->message = malloc(strlen(message) + 1);
     if((*log_e)->message == NULL){
+        free(*log_e);
+        free((*log_e)->time_stamp);
+        free((*log_e)->severity);
         return FAILURE;
     }
     strcpy((*log_e)->message, message);
