@@ -1,143 +1,231 @@
-# Log Manager in C (Array and Linked List Implementations)
+# Log Manager
 
-This project provides two separate implementations of a **Log Manager** in the C programming language:
+A comprehensive C library for managing log entries with multiple data structure implementations and sorting algorithms. This project demonstrates efficient memory management, data structure operations, and algorithmic implementations for log management systems.
 
-* **Log List Manager** using a **singly linked list**.
-* **Log Array Manager** using a **dynamically resizing array**.
+## Overview
 
-Both implementations provide a way to create, store, search, manage, and output log entries consisting of timestamp, severity, and message fields.
+The Log Manager project provides two distinct implementations for handling log entries:
+- **Array-based implementation** (`LogArrayManager`) - Dynamic array with automatic resizing
+- **Linked list implementation** (`LogManager`) - Doubly-linked list structure
 
----
+Both implementations support common operations like adding, removing, searching, and sorting log entries, making it easy to choose the most appropriate data structure for your use case.
 
 ## Features
 
-* ✅ Create and initialize a log manager (array or list).
-* ✅ Dynamically allocate memory for log entries.
-* ✅ Add logs with timestamp, severity, and message.
-* ✅ Remove logs by severity.
-* ✅ Write all logs to a file or console.
-* ✅ Clear all logs while keeping the manager reusable.
-* ✅ Search logs by keyword (linked list only).
-* ✅ Efficient reallocation for array-based storage.
+### Core Functionality
+- ✅ **Dynamic Memory Management** - Automatic resizing and efficient memory allocation
+- ✅ **Multiple Data Structures** - Choose between array-based or linked list implementations
+- ✅ **Comprehensive Sorting** - Quick sort, merge sort, heap sort, and bubble sort algorithms
+- ✅ **Flexible Operations** - Add, remove, search, and clear log entries
+- ✅ **File I/O Support** - Write logs to files or stdout
+- ✅ **Memory Safety** - Proper cleanup and error handling
 
----
+### Log Entry Structure
+Each log entry contains:
+- **Timestamp** - When the event occurred
+- **Severity Level** - INFO, WARN, ERROR, DEBUG, TRACE, etc.
+- **Message** - Descriptive text about the event
 
-## Structures
+### Sorting Algorithms
 
-### Log Entry
+#### Array Implementation
+- **Quick Sort** - O(n log n) average case, in-place sorting
+- **Merge Sort** - O(n log n) guaranteed, stable sorting
+- **Heap Sort** - O(n log n) guaranteed, in-place sorting
 
-```c
-typedef struct LogEntry {
-    char *time_stamp;
-    char *severity;
-    char *message;
-    struct LogEntry *next; // Used only in Log List Manager
-} LogEntry;
+#### Linked List Implementation  
+- **Bubble Sort** - O(n²) worst case, simple implementation
+- **Merge Sort** - O(n log n) guaranteed, optimized for linked lists
+
+## Project Structure
+
+```
+log-manager/
+├── src/
+│   ├── log_array_manager.c      # Array implementation
+│   ├── log_list_manager.c       # Linked list implementation
+│   ├── sample_driver.c          # List demo program
+│   └── sample_driver_array.c    # Array demo program
+├── include/
+│   ├── log_array_manager.h      # Array header file
+│   └── log_list_manager.h       # List header file
+├── Makefile                     # Build configuration
+└── README.md                    # This file
 ```
 
-### Log List Manager
+## Getting Started
 
-```c
-typedef struct {
-    LogEntry *head;
-    LogEntry *tail;
-    int count;
-} LogManager;
-```
+### Prerequisites
+- GCC compiler with C89/C90 support
+- Make utility
+- Unix-like environment (Linux, macOS, WSL)
 
-### Log Array Manager
+### Building the Project
 
-```c
-typedef struct {
-    LogEntry **entries;
-    size_t count;
-    size_t capacity;
-} LogArrayManager;
-```
-
----
-
-## Compilation
-
-Use the following commands to compile:
-
-### Linked List Version
+Clone and build the project:
 
 ```bash
-gcc -Wall -Wextra -std=c89 -o log_list sample_driver.c log_list_manager.c
+git clone <repository-url>
+cd log-manager
+make all
 ```
 
-### Array Version
+This will create two executable programs:
+- `list_driver` - Demonstrates linked list implementation
+- `array_driver` - Demonstrates array implementation
 
+### Running the Demos
+
+Test the linked list implementation:
 ```bash
-gcc -Wall -Wextra -std=c89 -o log_array sample_driver_array.c log_array_manager.c
+./list_driver
 ```
 
----
+Test the array implementation:
+```bash
+./array_driver
+```
 
-## Usage
+### Clean Build Files
+```bash
+make clean
+```
 
-### Create a manager
+## Usage Examples
+
+### Array Implementation
 
 ```c
-LogManager *log_m = create_log_manager();
-LogArrayManager *log_am = create_log_array_manager(10); /* initial capacity */
+#include "log_array_manager.h"
+
+// Create a log manager with initial capacity
+LogArrayManager *manager = create_log_array_manager(10);
+
+// Add log entries
+add_log_entry(manager, "2025-01-15 10:30:00", "INFO", "System started");
+add_log_entry(manager, "2025-01-15 10:31:00", "WARN", "Low memory");
+add_log_entry(manager, "2025-01-15 10:32:00", "ERROR", "Connection failed");
+
+// Sort logs by severity
+merge_sort_array(manager);
+
+// Write all logs to stdout
+write_all_logs(manager, stdout);
+
+// Remove logs by severity
+remove_logs_by_severity(manager, "WARN");
+
+// Clean up
+destroy_log_array_manager(manager);
 ```
 
-### Add logs
+### Linked List Implementation
 
 ```c
-add_log(log_m, "2025-07-26 12:00", "INFO", "Server started");
-add_log_entry(log_am, "2025-07-26 12:00", "INFO", "Server started");
+#include "log_list_manager.h"
+
+// Create a log manager
+LogManager *manager = create_log_manager();
+
+// Add log entries
+add_log(manager, "2025-01-15 10:30:00", "INFO", "Application started");
+add_log(manager, "2025-01-15 10:31:00", "DEBUG", "Processing request");
+
+// Sort logs
+merge_sort_logs(manager);
+
+// Search and write matching logs
+search_and_write_logs(manager, "request", stdout);
+
+// Clean up
+destroy_log_manager(manager);
 ```
 
-### Write all logs
+## API Reference
 
-```c
-write_all_logs(log_m, stdout);
-write_all_logs(log_am, stdout);
-```
+### Array Manager Functions
 
-### Search by keyword (Linked List Only)
+| Function | Description | Return Value |
+|----------|-------------|--------------|
+| `create_log_array_manager(size_t capacity)` | Creates new array manager | Pointer to manager or NULL |
+| `destroy_log_array_manager(LogArrayManager *mgr)` | Frees all memory | SUCCESS/FAILURE |
+| `add_log_entry(manager, timestamp, severity, message)` | Adds new log entry | SUCCESS/FAILURE |
+| `remove_logs_by_severity(manager, severity)` | Removes matching logs | Number removed |
+| `quick_sort_array(LogArrayManager *mgr)` | Sorts using quicksort | SUCCESS/FAILURE |
+| `merge_sort_array(LogArrayManager *mgr)` | Sorts using mergesort | SUCCESS/FAILURE |
+| `heap_sort_array(LogArrayManager *mgr)` | Sorts using heapsort | SUCCESS/FAILURE |
+| `write_all_logs(manager, stream)` | Outputs all logs | SUCCESS/FAILURE |
+| `clear_log_array(LogArrayManager *mgr)` | Removes all entries | SUCCESS/FAILURE |
 
-```c
-search_and_write_logs(log_m, "error", stdout);
-```
+### List Manager Functions
 
-### Remove logs by severity
+| Function | Description | Return Value |
+|----------|-------------|--------------|
+| `create_log_manager()` | Creates new list manager | Pointer to manager or NULL |
+| `destroy_log_manager(LogManager *mgr)` | Frees all memory | SUCCESS/FAILURE |
+| `add_log(manager, timestamp, severity, message)` | Adds new log entry | SUCCESS/FAILURE |
+| `remove_logs_by_severity(manager, severity)` | Removes matching logs | Number removed |
+| `bubble_sort_logs(LogManager *mgr)` | Sorts using bubble sort | SUCCESS/FAILURE |
+| `merge_sort_logs(LogManager *mgr)` | Sorts using merge sort | SUCCESS/FAILURE |
+| `search_and_write_logs(manager, keyword, stream)` | Search and output logs | Number found |
+| `write_all_logs(manager, stream)` | Outputs all logs | SUCCESS/FAILURE |
+| `clear_logs(LogManager *mgr)` | Removes all entries | SUCCESS/FAILURE |
 
-```c
-remove_logs_by_severity(log_m, "DEBUG");
-remove_logs_by_severity(log_am, "DEBUG");
-```
+## Performance Characteristics
 
-### Clear logs
+### Time Complexity
 
-```c
-clear_logs(log_m);
-clear_log_array(log_am);
-```
+| Operation | Array Implementation | List Implementation |
+|-----------|---------------------|-------------------|
+| Add Entry | O(1) amortized | O(1) |
+| Remove by Severity | O(n) | O(n) |
+| Quick Sort | O(n log n) avg | N/A |
+| Merge Sort | O(n log n) | O(n log n) |
+| Heap Sort | O(n log n) | N/A |
+| Bubble Sort | N/A | O(n²) |
+| Search | O(n) | O(n) |
 
-### Destroy manager
+### Space Complexity
+- **Array Implementation**: O(n) with dynamic resizing
+- **List Implementation**: O(n) with per-node allocation
 
-```c
-destroy_log_manager(log_m);
-destroy_log_array_manager(log_am);
-```
+## Error Handling
 
----
+The library uses consistent error handling:
+- `SUCCESS` (0) for successful operations
+- `FAILURE` (-1) for errors
+- Return counts for operations that remove/find entries
+- NULL pointers for failed memory allocations
 
-## Sample Drivers
+All functions validate input parameters and handle edge cases gracefully.
 
-* `sample_driver.c`: Demonstrates usage of the linked list version.
-* `sample_driver_array.c`: Demonstrates usage of the array version.
+## Memory Management
 
----
+The library implements robust memory management:
+- **Dynamic allocation** for all strings and structures
+- **Automatic cleanup** when destroying managers
+- **Reallocation** for array growth (doubles capacity)
+- **Memory leak prevention** with proper cleanup functions
 
-## Notes
+## Code Quality Features
 
-* All memory is dynamically allocated and properly freed.
-* Uses standard C89 style with strict compiler flags.
-* All functions return `SUCCESS` or `FAILURE` macros for consistency.
-* The array manager automatically doubles capacity when full.
-* The list manager supports keyword searching, while the array manager does not.
+- **C89/C90 Compliance** - Compatible with older C standards
+- **Static Functions** - Proper encapsulation of internal helpers
+- **Consistent Naming** - Clear, descriptive function names
+- **Error Checking** - Comprehensive input validation
+- **Documentation** - Well-commented code
+- **Modular Design** - Separate headers and implementations
+
+## Comparison: Array vs Linked List
+
+### Choose Array Implementation When:
+- You need **fast random access** to log entries
+- **Memory efficiency** is important (less overhead per entry)
+- You want **better cache performance**
+- **Sorting performance** is critical
+
+### Choose Linked List Implementation When:
+- You frequently **insert/delete** entries
+- **Memory allocation** needs to be flexible
+- You want to **search by keywords** in messages
+- **Dynamic sizing** without reallocation is preferred
