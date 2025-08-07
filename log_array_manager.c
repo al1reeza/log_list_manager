@@ -5,6 +5,8 @@
 
 static int free_entry(LogEntry *log_e); 
 static int create_entry(LogEntry **log_e, const char *timestamp, const char *severity, const char *message);
+static void merge_sort_array_aux(LogArrayManager *log_am, int left, int right);
+static int merge(LogEntry **entries, int left, int middle, int right);
 
 /*
 * Creates and initializes a new LogArrayManager with initial capacity.
@@ -179,5 +181,82 @@ int write_all_logs(const LogArrayManager *log_am, FILE *stream){
         LogEntry *log_e = log_am->entries[i];
         fprintf(stream, "[%s] [%s] %s\n", log_e->time_stamp, log_e->severity, log_e->message);
     }
+    return SUCCESS;
+}
+
+/*
+* Comparator for our list (based on message field of LogEntry).
+*/
+static int array_comparator(const LogEntry *a, const LogEntry *b){
+    return strcmp(a->severity, b->severity);
+}
+
+/*
+* Quick sort for array.
+*/
+int quick_sort_array(LogArrayManager *log_am){
+    return 0;
+}
+
+/*
+* Merge sort for array. 
+*/
+int merge_sort_array(LogArrayManager *log_am){
+
+    merge_sort_array_aux(log_am, 0, log_am->count-1);
+    return SUCCESS;
+
+}
+
+/*
+* Auxillary function for merge_sort_array.
+*/
+static void merge_sort_array_aux(LogArrayManager *log_am, int left, int right){
+
+    int middle = left + (right - left) / 2; /* to avoid overflow */
+    if(left >= right){
+        return;
+    }
+
+    merge_sort_array_aux(log_am, left, middle); /* calls merge sort on the left subarray */
+
+    merge_sort_array_aux(log_am, middle + 1, right); /* calls the merge sort on the right subarray */
+
+    merge(log_am->entries, left, middle, right);
+
+}
+
+/*
+* Merges two sorted arrays
+*/
+static int merge(LogEntry **entries, int left, int middle, int right){
+    
+    int i = left, j = (middle + 1), k = 0, len = right - left + 1;
+    LogEntry **res_arr = calloc(len, sizeof(LogEntry *));
+    if(res_arr == NULL){
+        return FAILURE;
+    }
+    /* Fills up res array until eitehr the left or right subarray runs out */
+    while(i <= middle && j <= right){
+        int cmp = array_comparator(entries[i], entries[j]);
+        
+        if(cmp <= 0){
+            res_arr[k++] = entries[i++];
+        }else{
+            res_arr[k++] = entries[j++];
+        }
+    }
+    /* left over from the left subarray */
+    while(i <= middle){
+        res_arr[k++] = entries[i++];
+    }
+    /* left over from the right subarray */
+    while(j <= right){
+        res_arr[k++] = entries[j++];
+    }
+
+    memmove(entries + left, res_arr, len * sizeof(LogEntry *)); /* copies our result merged array over */
+    free(res_arr);
+
     return SUCCESS;
 }

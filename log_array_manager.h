@@ -27,5 +27,6 @@ int add_log_entry(LogArrayManager *log_am, const char *timestamp, const char *se
 int remove_logs_by_severity(LogArrayManager *log_am, const char *severity);
 int clear_log_array(LogArrayManager *log_am);
 int write_all_logs(const LogArrayManager *log_am, FILE *stream);
-
+int quick_sort_array(LogArrayManager *log_am);
+int merge_sort_array(LogArrayManager *log_am);
 #endif 

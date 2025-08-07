@@ -19,4 +19,4 @@ sample_driver_array.o: sample_driver_array.c log_array_manager.h
 	$(CC) $(CFLAGS) -c sample_driver_array.c
 
 clean:
-	rm -f $(PROGS)
+	rm -f $(PROGS) log_array_manager.o sample_driver.o log_list_manager.o sample_driver_array.o
