@@ -19,17 +19,24 @@ int main(void) {
     write_all_logs(log_manager, stdout);
 
     merge_sort_array(log_manager);
-
     printf("\nLogs after merge sort:\n");
     write_all_logs(log_manager, stdout);
 
-    remove_logs_by_severity(log_manager, "WARN");
+    add_log_entry(log_manager, "2025-07-22 12:05", "DEBUG", "Debugging started");
+    add_log_entry(log_manager, "2025-07-22 12:06", "INFO", "Service restarted");
 
+    printf("\nLogs after manual adding unordered (undo sort effect):\n");
+    write_all_logs(log_manager, stdout);
+
+    quick_sort_array(log_manager);
+    printf("\nLogs after quick sort:\n");
+    write_all_logs(log_manager, stdout);
+
+    remove_logs_by_severity(log_manager, "WARN");
     printf("\nAfter removing WARN logs:\n");
     write_all_logs(log_manager, stdout);
 
     clear_log_array(log_manager);
-
     printf("\nAfter clearing logs:\n");
     write_all_logs(log_manager, stdout);
 

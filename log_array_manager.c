@@ -5,6 +5,7 @@
 
 static int free_entry(LogEntry *log_e); 
 static int create_entry(LogEntry **log_e, const char *timestamp, const char *severity, const char *message);
+static void quick_sort_array_aux(LogEntry **entries, int s_index, int p_index);
 static void merge_sort_array_aux(LogArrayManager *log_am, int left, int right);
 static int merge(LogEntry **entries, int left, int middle, int right);
 
@@ -195,8 +196,45 @@ static int array_comparator(const LogEntry *a, const LogEntry *b){
 * Quick sort for array.
 */
 int quick_sort_array(LogArrayManager *log_am){
-    return 0;
+    
+    quick_sort_array_aux(log_am->entries, 0, log_am->count - 1);
+    return SUCCESS;
+
 }
+
+/*
+* Auxillary function for quick_sort_array. (s in s_index refers to start)
+*/
+static void quick_sort_array_aux(LogEntry **entries, int s_index, int p_index){
+
+    LogEntry *tmp;
+    /* base case */
+    if(s_index >= p_index){
+        return;
+    }
+    
+    int i = s_index - 1, j = s_index;
+    /* puts all elements smaller than pivot in the begginging */
+    while(j < p_index){
+        int cmp = array_comparator(entries[j], entries[p_index]);
+        if(cmp <= 0){
+            tmp = entries[++i];
+            entries[i] = entries[j];
+            entries[j] = tmp;
+        }
+        j++;
+    }
+    /* adds the pivot after */
+    tmp = entries[++i];
+    entries[i] = entries[p_index];
+    entries[p_index] = tmp;
+    
+
+    quick_sort_array_aux(entries, s_index, i - 1); /* quick sort on left subarray */
+
+    quick_sort_array_aux(entries, i + 1, p_index); /* quick sort on right subarray */
+
+}   
 
 /*
 * Merge sort for array. 
