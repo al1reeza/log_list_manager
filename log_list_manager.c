@@ -159,7 +159,6 @@ int remove_logs_by_severity(LogManager *log_m, const char *severity) {
                     free_entry(curr_entry);
                     curr_entry = NULL;
                 }
-                
             }
             /* Case where elemetn is in the middle */
             else{
