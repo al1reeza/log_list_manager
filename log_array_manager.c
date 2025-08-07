@@ -104,6 +104,10 @@ int add_log_entry(LogArrayManager *log_am, const char *timestamp, const char *se
         /* doubles the capacity */
         LogEntry **test_ptr= realloc(log_am->entries, (log_am->capacity * 2) * sizeof(LogEntry *));
         if(test_ptr == NULL){
+            free(log_e->message);
+            free(log_e->time_stamp);
+            free(log_e->severity);
+            free(log_e);
             return FAILURE;
         }else{
             log_am->entries = test_ptr;
