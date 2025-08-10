@@ -6,7 +6,7 @@ A comprehensive C library for managing log entries with multiple data structure 
 
 The Log Manager project provides two distinct implementations for handling log entries:
 - **Array-based implementation** (`LogArrayManager`) - Dynamic array with automatic resizing
-- **Linked list implementation** (`LogManager`) - Doubly-linked list structure
+- **Linked list implementation** (`LogManager`) - Linked list structure
 
 Both implementations support common operations like adding, removing, searching, and sorting log entries, making it easy to choose the most appropriate data structure for your use case.
 
