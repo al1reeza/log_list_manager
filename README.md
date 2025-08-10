@@ -216,6 +216,7 @@ The library implements robust memory management:
 - **Memory allocation** needs to be flexible
 - You want to **search by keywords** in messages
 - **Dynamic sizing** without reallocation is preferred
+- You need to access logs **in the order** they were inserted
 
 ## Contributing
 
