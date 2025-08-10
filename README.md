@@ -34,8 +34,8 @@ Each log entry contains:
 - **Heap Sort** - O(n log n) guaranteed, in-place sorting
 
 #### Linked List Implementation  
-- **Bubble Sort** - O(n²) worst case, simple implementation
-- **Merge Sort** - O(n log n) guaranteed, optimized for linked lists
+- **Bubble Sort** - O(n²) worst case, simple implementation (Meant for small data sets)
+- **Merge Sort** - O(n log n) guaranteed, optimized for linked lists (Meant for larger data sets)
 
 ## Project Structure
 
