@@ -23,7 +23,7 @@ Both implementations support common operations like adding, removing, searching,
 ### Log Entry Structure
 Each log entry contains:
 - **Timestamp** - When the event occurred
-- **Severity Level** - Severity of the event.
+- **Severity Level** - Severity of the event
 - **Message** - Descriptive text about the event
 
 ### Sorting Algorithms
