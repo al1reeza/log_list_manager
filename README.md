@@ -96,19 +96,19 @@ make clean
 ```c
 #include "log_array_manager.h"
 
-LogArrayManager *manager = create_log_array_manager(10);
+LogArrayManager *log_am = create_log_array_manager(10);
 
-add_log_entry(manager, "2025-01-15 10:30:00", "INFO", "System started");
-add_log_entry(manager, "2025-01-15 10:31:00", "WARN", "Low memory");
-add_log_entry(manager, "2025-01-15 10:32:00", "ERROR", "Connection failed");
+add_log_entry(log_am, "2025-01-15 10:30:00", "INFO", "System started");
+add_log_entry(log_am, "2025-01-15 10:31:00", "WARN", "Low memory");
+add_log_entry(log_am, "2025-01-15 10:32:00", "ERROR", "Connection failed");
 
-merge_sort_array(manager);
+merge_sort_array(log_am);
 
-write_all_logs(manager, stdout);
+write_all_logs(log_am, stdout);
 
-remove_logs_by_severity(manager, "WARN");
+remove_logs_by_severity(log_am, "WARN");
 
-destroy_log_array_manager(manager);
+destroy_log_array_manager(log_am);
 ```
 
 ### Linked List Implementation
@@ -116,16 +116,16 @@ destroy_log_array_manager(manager);
 ```c
 #include "log_list_manager.h"
 
-LogManager *manager = create_log_manager();
+LogManager *log_m = create_log_manager();
 
-add_log(manager, "2025-01-15 10:30:00", "INFO", "Application started");
-add_log(manager, "2025-01-15 10:31:00", "DEBUG", "Processing request");
+add_log(log_m, "2025-01-15 10:30:00", "INFO", "Application started");
+add_log(log_m, "2025-01-15 10:31:00", "DEBUG", "Processing request");
 
-merge_sort_logs(manager);
+merge_sort_logs(log_m);
 
-search_and_write_logs(manager, "request", stdout);
+search_and_write_logs(log_m, "request", stdout);
 
-destroy_log_manager(manager);
+destroy_log_manager(log_m);
 ```
 
 ## API Reference
