@@ -3,12 +3,12 @@
 
 #include <stdio.h>
 
-#define SUCCESS 1
+#define SUCCESS 0
 #define FAILURE -1
 
 /* Structure representing a single log entry */
 typedef struct {
-    char *time_stamp;
+    char *time_stamp; /* YYYY-MM-DD HH:MM */
     char *severity;
     char *message;
 } LogEntry;

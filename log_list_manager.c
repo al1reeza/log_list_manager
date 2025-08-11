@@ -299,7 +299,12 @@ int bubble_sort_logs(LogManager *log_m){
 * Comparator for our list (based on message field of LogEntry).
 */
 static int list_comparator(const LogEntry *a, const LogEntry *b){
-    return strcmp(a->severity, b->severity);
+
+    int cmp = strcmp(a->severity, b->severity);
+    if(cmp != 0){
+        return cmp;
+    }
+    return strcmp(a->message, b->message); 
 }
 
 /*
