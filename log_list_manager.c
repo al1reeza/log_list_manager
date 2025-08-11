@@ -40,8 +40,6 @@ int destroy_log_manager(LogManager *log_m) {
         free_entry(curr_entry);
         curr_entry = next_entry;
     }
-    log_m->head = NULL;
-    log_m->tail = NULL;
     free(log_m);
     return SUCCESS;
 
@@ -128,7 +126,7 @@ int add_log(LogManager *log_m, const char *timestamp, const char *severity, cons
 */
 int remove_logs_by_severity(LogManager *log_m, const char *severity) {
     
-    int num_entry = 0;
+    int num_removed = 0;
     LogEntry *curr_entry = log_m->head, *prev_entry = NULL;
     /* Invalid Parameters */
     if(log_m == NULL || severity == NULL){
@@ -139,7 +137,7 @@ int remove_logs_by_severity(LogManager *log_m, const char *severity) {
             /* Case where first entry is being removed */
             if(prev_entry == NULL){
                 log_m->head = curr_entry->next;
-                if(log_m->tail == curr_entry){
+                if(curr_entry == log_m->tail){
                     log_m->tail = curr_entry->next;
                 }
                 free_entry(curr_entry);
@@ -157,7 +155,7 @@ int remove_logs_by_severity(LogManager *log_m, const char *severity) {
                     log_m->tail = prev_entry;
                     prev_entry->next = NULL;
                     free_entry(curr_entry);
-                    curr_entry = NULL;
+                    curr_entry = prev_entry->next;
                 }
             }
             /* Case where elemetn is in the middle */
@@ -166,7 +164,7 @@ int remove_logs_by_severity(LogManager *log_m, const char *severity) {
                 free_entry(curr_entry);
                 curr_entry = prev_entry->next;
             }
-            num_entry++;
+            num_removed++;
             log_m->count--;
         }else{
             prev_entry = curr_entry;
@@ -174,7 +172,7 @@ int remove_logs_by_severity(LogManager *log_m, const char *severity) {
         }
     }
 
-    return num_entry;
+    return num_removed;
 
 }
 

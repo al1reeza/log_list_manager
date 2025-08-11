@@ -19,11 +19,12 @@ static void sort_max_heap(LogEntry **entries, int len);
 */
 LogArrayManager *create_log_array_manager(size_t initial_capacity){
 
+    LogArrayManager *log_am;
     /* Invalid Parameter */
     if(initial_capacity == 0){
         return NULL;
     }
-    LogArrayManager *log_am = calloc(1, sizeof(LogArrayManager));
+    log_am = calloc(1, sizeof(LogArrayManager));
     if(log_am == NULL){
         return NULL;
     }
@@ -68,15 +69,11 @@ static int free_entry(LogEntry *log_e){
     if(log_e == NULL){
         return FAILURE;
     }
-    if(log_e->time_stamp != NULL){
-        free(log_e->time_stamp);
-    }
-    if (log_e->severity != NULL){
-        free(log_e->severity);
-    }
-    if(log_e->message != NULL){
-        free(log_e->message);
-    }
+
+    free(log_e->time_stamp);
+    free(log_e->severity);
+    free(log_e->message);
+    
     free(log_e);
     
     return SUCCESS;
@@ -155,6 +152,7 @@ static int create_entry(LogEntry **log_e, const char *timestamp, const char *sev
     strcpy((*log_e)->message, message);
 
     return SUCCESS;
+
 }
 
 /*
@@ -218,7 +216,13 @@ int write_all_logs(const LogArrayManager *log_am, FILE *stream){
 * Comparator for our list (based on message field of LogEntry).
 */
 static int array_comparator(const LogEntry *a, const LogEntry *b){
-    return strcmp(a->severity, b->severity);
+
+    int cmp = strcmp(a->severity, b->severity);
+    if(cmp != 0){
+        return cmp;
+    }
+    return strcmp(a->message, b->message);
+
 }
 
 /*
